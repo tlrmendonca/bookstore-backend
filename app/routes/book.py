@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
-from typing import Dict
+from typing import List
 from ..models.book import Book
 from bson import ObjectId
 from bson.errors import InvalidId
@@ -35,6 +35,17 @@ async def get_book(book_id: str) -> Book:
     book_data["_id"] = str(book_data["_id"])
     return Book(**book_data)
 
+@router.get("/")
+async def get_books() -> List[Book]:
+    """Get all books in the database"""
+    books_data = await db.books.find().to_list(length=None)
+    if not books_data:
+        raise HTTPException(status_code=404, detail="No books found")
+
+    for book in books_data:
+        book["_id"] = str(book["_id"])
+
+    return [Book(**book) for book in books_data]
 
 @router.delete("/{book_id}")
 async def delete_book(book_id: str) -> None:
