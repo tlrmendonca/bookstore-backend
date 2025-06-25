@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "bookstore-backend"
+version = "0.1.0"
+description = ""
+authors = ["tlrmendonca <tomas.mendonca.01@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.115.13"
+pydantic = {extras = ["email"], version = "^2.11.7"}
+motor = "^3.7.1"
+uvicorn = "^0.34.3"
+python-dotenv = "^1.1.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
