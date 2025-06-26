@@ -21,6 +21,17 @@ async def create_client(client: Client) -> Client:
     client_dict["_id"] = str(result.inserted_id)
     return Client(**client_dict)
 
+@router.get("/")
+async def get_clients() -> list[Client]:
+    """Get all clients in the database"""
+    clients_data = await db.clients.find().to_list(length=None)
+    if not clients_data:
+        raise HTTPException(status_code=404, detail="No clients found")
+
+    for client in clients_data:
+        client["_id"] = str(client["_id"])
+
+    return [Client(**client) for client in clients_data]
 
 @router.get("/{client_id}")
 async def get_client(client_id: str) -> Client:

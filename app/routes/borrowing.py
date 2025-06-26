@@ -34,6 +34,17 @@ async def get_borrowing(borrowing_id: str) -> Borrowing:
     borrowing_data["_id"] = str(borrowing_data["_id"])
     return Borrowing(**borrowing_data)
 
+@router.get("/")
+async def get_borrowings() -> List[Borrowing]:
+    """Get all borrowings in the database"""
+    borrowings_data = await db.borrowings.find().to_list(length=None)
+    if not borrowings_data:
+        raise HTTPException(status_code=404, detail="No borrowings found")
+
+    for borrowing in borrowings_data:
+        borrowing["_id"] = str(borrowing["_id"])
+
+    return [Borrowing(**borrowing) for borrowing in borrowings_data]
 
 @router.get("/client/{client_id}")
 async def get_borrowings_by_client(client_id: str) -> List[Borrowing]:
