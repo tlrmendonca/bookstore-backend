@@ -1,10 +1,11 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from ..models.client import Client
 from bson import ObjectId
 from bson.errors import InvalidId
 
 from ..db import db
 from ..utils.utils import *
+from ..utils.auth import verify_token
 
 router = APIRouter(prefix="/clients", tags=["clients"])
 
@@ -22,7 +23,7 @@ async def create_client(client: Client) -> Client:
     return Client(**client_dict)
 
 @router.get("/")
-async def get_clients() -> list[Client]:
+async def get_clients(token_data: dict = Depends(verify_token)) -> list[Client]:
     """Get all clients in the database"""
     clients_data = await db.clients.find().to_list(length=None)
     if not clients_data:

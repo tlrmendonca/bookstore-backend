@@ -234,6 +234,20 @@ python-versions = ">=3.9"
 typing-extensions = ">=4.6.0,<4.7.0 || >4.7.0"
 
 [[package]]
+name = "pyjwt"
+version = "2.10.1"
+description = "JSON Web Token implementation in Python"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.extras]
+crypto = ["cryptography (>=3.4.0)"]
+dev = ["coverage[toml] (==5.0.4)", "cryptography (>=3.4.0)", "pre-commit", "pytest (>=6.0.0,<7.0.0)", "sphinx", "sphinx-rtd-theme", "zope.interface"]
+docs = ["sphinx", "sphinx-rtd-theme", "zope.interface"]
+tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
+
+[[package]]
 name = "pymongo"
 version = "4.13.2"
 description = "PyMongo - the Official MongoDB Python driver"
@@ -355,7 +369,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "2e81ead8e31963f9b77665d1d94143607ed5cb5fbb31f767003d5856b4a9f990"
+content-hash = "6d09b41170f5292778d25a62eea4bb6ba1ada3a80303d01fbf58b045372159bb"
 
 [metadata.files]
 annotated-types = []
@@ -377,6 +391,7 @@ pluggy = []
 py = []
 pydantic = []
 pydantic-core = []
+pyjwt = []
 pymongo = []
 pytest = []
 python-dotenv = []

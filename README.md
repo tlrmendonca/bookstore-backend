@@ -11,6 +11,8 @@ poetry run uvicorn app.main:app --reload
 
 3. Many of the API methods do not use any *service* layer, which would not be a good practice in a production application, but for the sake of brevity, only a few methods actually utilize a *Router -> Service -> Database* pattern.
 
+4. Auth is literally just for show. In a real scenario, there would be at least roles with permissions and tokens would bear a role rather than just being accepted by default. A login system would kind of be required, but that's out of scope for this demo.
+
 ### Structure:
 ```
 /app/

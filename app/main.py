@@ -10,6 +10,7 @@ from app.routes.bookstore import router as bookstore_router
 from app.routes.borrowing import router as borrowing_router
 from app.routes.client import router as client_router
 from app.routes.sale import router as sale_router
+from app.routes.login import router as login_router
 
 # Main app
 app = FastAPI(
@@ -33,6 +34,7 @@ app.include_router(bookstore_router)
 app.include_router(borrowing_router)
 app.include_router(client_router)
 app.include_router(sale_router)
+app.include_router(login_router)
 
 # MongoDB connection
 async def startup_event():
