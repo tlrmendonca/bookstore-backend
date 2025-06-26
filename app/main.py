@@ -1,9 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
-from typing import Any
 
-from .db import db, client
+from .db import client
 
 from app.routes.book import router as book_router
 from app.routes.bookstore import router as bookstore_router

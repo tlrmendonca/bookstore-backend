@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from ..models.borrowing import Borrowing, SourceType, BorrowingStatus
+from ..models.borrowing import Borrowing, BorrowingStatus
 from datetime import datetime
 import logging
 from bson import ObjectId
