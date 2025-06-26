@@ -4,10 +4,10 @@ from enum import Enum
 
 
 class BookCondition(str, Enum):
-    NEW = "new"
-    GOOD = "good"
-    FAIR = "fair"
-    POOR = "poor"
+    NEW = "New"
+    GOOD = "Good"
+    POOR = "Poor"
+    VERY_POOR = "Very Poor"
 
 
 class Book(BaseModel):
