@@ -13,6 +13,8 @@ poetry run uvicorn app.main:app --reload
 
 4. Auth is literally just for show. In a real scenario, there would be at least roles with permissions and tokens would bear a role rather than just being accepted by default. A login system would kind of be required, but that's out of scope for this demo.
 
+5. Tests do not cover the vast majority of the application.
+
 ### Structure:
 ```
 /app/
@@ -28,6 +30,9 @@ poetry run uvicorn app.main:app --reload
 │   └── borrowing.py
 ├── utils/
 │   └── utils.py
+├── tests/
+│   ├── test_main.py
+│   └── db.py
 ├── db.py
 └── main.py
 poetry.lock

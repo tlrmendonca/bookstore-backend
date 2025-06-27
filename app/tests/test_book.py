@@ -21,8 +21,8 @@ async def test_get_books():
     # populate db
     await populate_db()
 
-    response = await client.get("/books/")
+    response = await client.get("/books/?limit=100")
     assert response.status_code == 200
-    assert isinstance(response.json(), list)
+    assert isinstance(response.json(), dict)
 
     await clear_db()
