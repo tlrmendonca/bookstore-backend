@@ -1,8 +1,6 @@
-from fastapi import APIRouter, HTTPException, status
-from typing import List
+from fastapi import APIRouter, HTTPException, status, Query
+from typing import List, Optional
 from ..models.book import Book
-from bson import ObjectId
-from bson.errors import InvalidId
 
 from ..db import db
 from ..utils.utils import *
@@ -36,16 +34,30 @@ async def get_book(book_id: str) -> Book:
     return Book(**book_data)
 
 @router.get("/")
-async def get_books() -> List[Book]:
+async def get_books(limit: int = Query(20, le=100), cursor: Optional[str] = None) -> dict:
     """Get all books in the database"""
-    books_data = await db.books.find().to_list(length=None)
+    print(f"Fetching books with cursor: {cursor} and limit: {limit}")
+    query = {}
+    # cursor is the object Id in string format that bookmarks the last fetched book
+    if cursor:
+        query["_id"] = {"$gt": ObjectId(cursor)}
+
+    books_data = await db.books.find(query).sort("_id", 1).limit(limit).to_list(limit)
     if not books_data:
         raise HTTPException(status_code=404, detail="No books found")
-
+    
     for book in books_data:
         book["_id"] = str(book["_id"])
 
-    return [Book(**book) for book in books_data]
+    # prepare return
+    books = [Book(**book) for book in books_data]
+    next_cursor = str(books_data[-1]["_id"])
+
+    return {
+        "books": books,
+        "next_cursor": next_cursor,
+        "has_more": len(books_data) == limit
+    }
 
 @router.delete("/{book_id}")
 async def delete_book(book_id: str) -> None:
