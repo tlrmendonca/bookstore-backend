@@ -15,6 +15,8 @@ poetry run uvicorn app.main:app --reload
 
 5. Tests do not cover the vast majority of the application.
 
+6. Great lesson on ObjectId vs string for MongoDB data.
+
 ### Structure:
 ```
 /app/

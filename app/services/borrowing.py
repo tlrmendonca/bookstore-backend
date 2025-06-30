@@ -10,11 +10,16 @@ async def process_borrowing_return(borrowing_id : ObjectId) -> Borrowing:
     """Mark a borrowing as returned by its MongoDB ObjectId"""
     now = datetime.now()
 
-    borrowing_data = await db.borrowings.find_one({"_id": borrowing_id})
+    borrowing_data = await db.borrowings.find_one({'_id': borrowing_id})
+    print(f"Found borrowing data: {borrowing_data}")
     if not borrowing_data:
         raise HTTPException(status_code=404, detail="Borrowing not found")
+    
 
     borrowing_data["_id"] = str(borrowing_data["_id"])
+    borrowing_data["source_id"] = str(borrowing_data["source_id"])
+    borrowing_data["borrower_id"] = str(borrowing_data["borrower_id"])
+    borrowing_data["book_id"] = str(borrowing_data["book_id"])
     borrowing = Borrowing(**borrowing_data)
     overdue : bool = now > borrowing.due_date
 

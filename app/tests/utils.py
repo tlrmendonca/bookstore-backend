@@ -6,9 +6,9 @@ def generate_data():
     """Generates sample data."""
     
     # Generate ObjectIds for consistent relationships
-    book_ids = [str(ObjectId()) for _ in range(5)]
-    client_ids = [str(ObjectId()) for _ in range(3)]
-    bookstore_id = str(ObjectId())
+    book_ids = [ObjectId() for _ in range(5)]
+    client_ids = [ObjectId() for _ in range(3)]
+    bookstore_id = ObjectId()
     
     # 5 Books with real titles
     books = [
@@ -98,19 +98,19 @@ def generate_data():
     # Book Inventory for the bookstore
     book_inventory = [
         {
-            "_id": str(ObjectId()),
+            "_id": ObjectId(),
             "bookstore_id": bookstore_id,
             "isbn": int(books[0]["isbn"]),  # 1984
             "quantity_available": 3
         },
         {
-            "_id": str(ObjectId()),
+            "_id": ObjectId(),
             "bookstore_id": bookstore_id,
             "isbn": int(books[1]["isbn"]),  # To Kill a Mockingbird
             "quantity_available": 2
         },
         {
-            "_id": str(ObjectId()),
+            "_id": ObjectId(),
             "bookstore_id": bookstore_id,
             "isbn": int(books[4]["isbn"]),  # Where the Crawdads Sing
             "quantity_available": 5
@@ -123,7 +123,7 @@ def generate_data():
     # Borrowings (mix of bookstore-to-client and client-to-client)
     borrowings = [
         {
-            "_id": str(ObjectId()),
+            "_id": ObjectId(),
             "borrower_id": client_ids[0],  # Emily borrows from bookstore
             "source_type": "bookstore",
             "source_id": bookstore_id,
@@ -134,7 +134,7 @@ def generate_data():
             "status": "active"
         },
         {
-            "_id": str(ObjectId()),
+            "_id": ObjectId(),
             "borrower_id": client_ids[1],  # Michael borrows from Emily (client-to-client)
             "source_type": "client",
             "source_id": client_ids[0],
@@ -145,7 +145,7 @@ def generate_data():
             "status": "active"
         },
         {
-            "_id": str(ObjectId()),
+            "_id": ObjectId(),
             "borrower_id": client_ids[2],  # Sarah borrowed and returned (overdue)
             "source_type": "bookstore",
             "source_id": bookstore_id,
@@ -156,7 +156,7 @@ def generate_data():
             "status": "returned_overdue"
         },
         {
-            "_id": str(ObjectId()),
+            "_id": ObjectId(),
             "borrower_id": client_ids[0],  # Emily borrows from Sarah (client-to-client)
             "source_type": "client",
             "source_id": client_ids[2],
@@ -171,7 +171,7 @@ def generate_data():
     # Sales
     sales = [
         {
-            "_id": str(ObjectId()),
+            "_id": ObjectId(),
             "client_id": client_ids[1],  # Michael buys from bookstore
             "book_id": book_ids[4],  # Where the Crawdads Sing
             "bookstore_id": bookstore_id,
@@ -179,7 +179,7 @@ def generate_data():
             "sale_date": now - timedelta(days=15)
         },
         {
-            "_id": str(ObjectId()),
+            "_id": ObjectId(),
             "client_id": client_ids[0],  # Emily buys from bookstore
             "book_id": book_ids[0],  # 1984
             "bookstore_id": bookstore_id,
@@ -187,7 +187,7 @@ def generate_data():
             "sale_date": now - timedelta(days=8)
         },
         {
-            "_id": str(ObjectId()),
+            "_id": ObjectId(),
             "client_id": client_ids[2],  # Sarah buys from bookstore
             "book_id": book_ids[1],  # To Kill a Mockingbird
             "bookstore_id": bookstore_id,
@@ -211,6 +211,8 @@ async def populate_db():
     await clear_db()
 
     data = generate_data()
+
+    print("Inserting sample data into the database...")
     
     # Insert data into respective collections
     await db.books.insert_many(data["books"])
@@ -226,4 +228,6 @@ async def populate_db():
     
 async def clear_db():
     """Drop everything in the database."""
+    print("Clearing database...")
     await db.client.drop_database("bookstore")
+    print("Database cleared successfully!")

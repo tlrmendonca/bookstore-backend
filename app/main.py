@@ -40,9 +40,12 @@ async def startup_event():
         await client.admin.command('ping')
         print("MongoDB connected")
 
-        from .utils.utils import populate_db_with_books, clear_books_collection 
-        await clear_books_collection()
-        await populate_db_with_books()
+        from .utils.utils import populate_db_with_books, populate_db, clear_db
+
+        await clear_db()
+        await populate_db()
+        await populate_db_with_books() # test pagination
+        print("Database populated with sample books")
     except Exception as e:
         print(f"MongoDB connection failed: {e}")
 

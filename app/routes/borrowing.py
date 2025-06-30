@@ -19,6 +19,9 @@ async def create_borrowing(borrowing: Borrowing) -> Borrowing:
         raise HTTPException(status_code=500, detail="Failed to create borrowing")
 
     borrowing_dict["_id"] = str(result.inserted_id)
+    borrowing_dict["source_id"] = str(borrowing_dict["source_id"])
+    borrowing_dict["borrower_id"] = str(borrowing_dict["borrower_id"])
+    borrowing_dict["book_id"] = str(borrowing_dict["book_id"])
     return Borrowing(**borrowing_dict)
 
 
@@ -32,6 +35,9 @@ async def get_borrowing(borrowing_id: str) -> Borrowing:
         raise HTTPException(status_code=404, detail="Borrowing not found")
 
     borrowing_data["_id"] = str(borrowing_data["_id"])
+    borrowing_data["source_id"] = str(borrowing_data["source_id"])
+    borrowing_data["borrower_id"] = str(borrowing_data["borrower_id"])
+    borrowing_data["book_id"] = str(borrowing_data["book_id"])
     return Borrowing(**borrowing_data)
 
 @router.get("/")
@@ -43,6 +49,9 @@ async def get_borrowings() -> List[Borrowing]:
 
     for borrowing in borrowings_data:
         borrowing["_id"] = str(borrowing["_id"])
+        borrowing["source_id"] = str(borrowing["source_id"])
+        borrowing["borrower_id"] = str(borrowing["borrower_id"])
+        borrowing["book_id"] = str(borrowing["book_id"])
 
     return [Borrowing(**borrowing) for borrowing in borrowings_data]
 
@@ -60,6 +69,9 @@ async def get_borrowings_by_client(client_id: str) -> List[Borrowing]:
 
     for borrowing in borrowings_data:
         borrowing["_id"] = str(borrowing["_id"])
+        borrowing["source_id"] = str(borrowing["source_id"])
+        borrowing["borrower_id"] = str(borrowing["borrower_id"])
+        borrowing["book_id"] = str(borrowing["book_id"])
 
     return [Borrowing(**borrowing) for borrowing in borrowings_data]
 
@@ -78,10 +90,13 @@ async def get_borrowings_by_bookstore(bookstore_id: str) -> List[Borrowing]:
 
     for borrowing in borrowings_data:
         borrowing["_id"] = str(borrowing["_id"])
+        borrowing["source_id"] = str(borrowing["source_id"])
+        borrowing["borrower_id"] = str(borrowing["borrower_id"])
+        borrowing["book_id"] = str(borrowing["book_id"])
 
     return [Borrowing(**borrowing) for borrowing in borrowings_data]
 
-@router.get("return/{borrowing_id}")
+@router.get("/return/{borrowing_id}")
 async def return_borrowing(borrowing_id: str) -> Borrowing:
     """Mark a borrowing as returned by its MongoDB ObjectId"""
     borrowing_object_id = validate_object_id(borrowing_id, "borrowing")
