@@ -34,15 +34,13 @@ async def get_book(book_id: str) -> Book:
     return Book(**book_data)
 
 @router.get("/")
-async def get_books(limit: int = Query(20, le=100), cursor: Optional[str] = None) -> dict:
+async def get_books(limit: int = Query(20, le=100), skip: int = Query(0)) -> dict:
     """Get all books in the database"""
-    print(f"Fetching books with cursor: {cursor} and limit: {limit}")
+    print(f"Fetching books and limit: {limit}")
     query = {}
     # cursor is the object Id in string format that bookmarks the last fetched book
-    if cursor:
-        query["_id"] = {"$gt": ObjectId(cursor)}
 
-    books_data = await db.books.find(query).sort("_id", 1).limit(limit).to_list(limit)
+    books_data = await db.books.find().skip(skip).limit(limit).to_list(limit)
     if not books_data:
         raise HTTPException(status_code=404, detail="No books found")
     
@@ -51,11 +49,10 @@ async def get_books(limit: int = Query(20, le=100), cursor: Optional[str] = None
 
     # prepare return
     books = [Book(**book) for book in books_data]
-    next_cursor = str(books_data[-1]["_id"])
 
     return {
         "books": books,
-        "next_cursor": next_cursor,
+        "skip": skip + len(books_data),
         "has_more": len(books_data) == limit
     }
 
