@@ -33,13 +33,26 @@ async def setup_test_db():
 client = TestClient(app=app)
 
 @pytest.mark.asyncio
-async def test_get_books(test_db):
+async def test_get_borrowings():
     """Test the GET /books endpoint."""
-    # populate db
-    await populate_db()
 
-    response = client.get("/books/?limit=100")
+    response = client.get("/borrowings/")
     assert response.status_code == 200
-    assert isinstance(response.json(), dict)
+    assert isinstance(response.json(), list)
 
-    await clear_db()
+@pytest.mark.asyncio
+async def test_return_borrowing():
+    """Test the POST /borrowings/return/{borrowing_id} endpoint."""
+
+    # Get a borrowing to return
+    borrowings_response = client.get("/borrowings/")
+    assert borrowings_response.status_code == 200
+
+    borrowings = borrowings_response.json()
+    
+    return_response = client.post(f"/borrowings/return/{borrowings[0]['_id']}")
+    print(return_response.json())
+    assert return_response.status_code == 200
+    assert return_response.json().get("status") in ("returned", "returned_overdue") 
+    
+    
